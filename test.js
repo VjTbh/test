@@ -51,7 +51,7 @@ console.log(item10k);
 // 4. Use filter → Get only Fashion category items.
 
 let fashion = data.cart.filter((product) => {
-  return product.category === fashion;
+  return product.category === "Fashion";
 });
 console.log(fashion);
 
@@ -63,39 +63,45 @@ data.cart.forEach((product) => {
 });
 
 // 6. Use reduce → Calculate total cart value
-// (price × quantity)
+// (price × qty)
 let totalCartValue = data.cart.reduce((total, product) => {
-  return total + product.price * product.quantity;
+  return total + product.price * product.qty;
 }, 0);
 console.log(totalCartValue);
 
 // 7. Use reduce → Count total number of unique items in cart.
 
-// 8. Use reduce → Total quantity of all products combined.
-let totalQuantity = data.cart.reduce((total, product) => {
-  return total + product.quantity;
+// 8. Use reduce → Total qty of all products combined.
+let totalqty = data.cart.reduce((total, product) => {
+  return total + product.qty;
 }, 0);
-console.log(totalQuantity);
+console.log(totalqty);
 
 // 9. Use map + reduce → Apply 5% discount to each item
 // and return new total cart value.
 
 let discountedCartValue = data.cart
-  .map(() => {
+  .map((product) => {
     let discountRate = 5;
-    let discountamount = (product.price * 5) / 100;
-    let finalDiscountAmount = product.price - discountamount;
+    let discountAmount = (product.price * 5) / 100;
+    let finalDiscountedAmount = product.price - discountAmount;
+    return {
+      ...product,
+      discountRate,
+      discountAmount,
+      finalDiscountedAmount,
+    };
   })
   .reduce((total, product) => {
-    return total + product.price * product.quantity;
+    return total + product.price * product.qty;
   }, 0);
 console.log(discountedCartValue);
 
 // 10. Use filter + reduce → Total spending on Electronics only.
 
 let Electronics = data.cart
-  .filter((products) => {
-    return product.category === Electronics;
+  .filter((product) => {
+    return product.category === "Electronics";
   })
   .reduce((total, products) => {
     return total + products.price;
@@ -103,12 +109,22 @@ let Electronics = data.cart
 console.log(Electronics);
 
 // 11. Add item to cart:
-// If item exists → increase quantity
+// If item exists → increase qty
 // Else → add new item
-// Use map + push logic.
+// Use map + push logic
+let item = { id: 5, name: "Book", price: 500, qty: 2, category: "Education" };
+let updatedCart = data.cart.map((product) => {
+  return (
+    product.id == item.id && {
+      ...product,
+      qty: product.qty + 1,
+    }
+  );
+});
+updatedCart.push(item);
 
-// 12. Update quantity:
-// Increase Shoes quantity by 2 using map.
+// 12. Update qty:
+// Increase Shoes qty by 2 using map.
 
 let shoes = data.cart.map((product) => {
   if (product.name === "Shoes") {
@@ -159,7 +175,7 @@ let totalvalue = data.cart.sort((a, b) => {
 });
 console.log(totalvalue);
 
-// 18. Use map + sort → Sort items by quantity
+// 18. Use map + sort → Sort items by qty
 // and return only item names.
 
 let sortbyqty = data.cart
@@ -183,14 +199,43 @@ console.log(mostExpensive);
 
 // 20. Use filter + map + reduce →
 // Average price of Fashion items.
-let avg = data.cart
-  .filter((product) => {
+let avg =
+  data.cart
+    .filter((product) => {
+      return product.category === "Fashion";
+    })
+    .map((product) => {
+      product.price;
+    })
+    .reduce((total, product) => {
+      return total + product;
+    }, 0) /
+  data.cart.filter((product) => {
     return product.category === "Fashion";
-  })
-  .map((product) => {
-    product.price;
-  }).reduce;
+  }).length;
 
 // ==============================
 // END OF ASSIGNMENT
 // ==============================
+
+let bb = data.cart.find((product) => {
+  return product.id == 100;
+});
+console.log(bb);
+
+if (bb) {
+  data.cart = data.cart.map((product) => {
+    return (
+      product.id == item.id && {
+        ...product,
+        qty: product.qty + 1,
+      }
+    );
+  });
+} else {
+  data.cart.push({
+    ...item,
+    qty: 1,
+  });
+}
+console.log(data.cart);
